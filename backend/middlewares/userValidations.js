@@ -1,28 +1,28 @@
-const { body } = require("express-validator");
+const { body } = require('express-validator');
 
 const userCreateValidation = () => {
   return [
-    body("name")
+    body('name')
       .isString()
-      .withMessage("O nome é obrigatório.")
+      .withMessage('O nome é obrigatório.')
       .isLength({ min: 3 })
-      .withMessage("O nome precisa ter no mínimo 3 caracteres."),
-    body("email")
+      .withMessage('O nome precisa ter no mínimo 3 caracteres.'),
+    body('email')
       .isString()
-      .withMessage("O email é obrigatório.")
+      .withMessage('O email é obrigatório.')
       .isEmail()
-      .withMessage("Insira um email valido."),
-    body("password")
+      .withMessage('Insira um email valido.'),
+    body('password')
       .isString()
-      .withMessage("A senha é obrigatória")
+      .withMessage('A senha é obrigatória')
       .isLength({ min: 5 })
-      .withMessage("A senha precisa ter no minimo 5 caracteres"),
-    body("confirmpassword")
+      .withMessage('A senha precisa ter no minimo 5 caracteres'),
+    body('confirmpassword')
       .isString()
-      .withMessage("A confirmação de senha é obrigatória.")
+      .withMessage('A confirmação de senha é obrigatória.')
       .custom((value, { req }) => {
         if (value != req.body.password) {
-          throw new Error("As senhas não são iguais.");
+          throw new Error('As senhas não são iguais.');
         }
         return true;
       }),
@@ -31,12 +31,12 @@ const userCreateValidation = () => {
 
 const loginValidation = () => {
   return [
-    body("email")
+    body('email')
       .isString()
-      .withMessage("O email é obrigatório.")
+      .withMessage('O email é obrigatório.')
       .isEmail()
-      .withMessage("Insira um e-mail válido."),
-    body("password").isString().withMessage("A senha é obrigatória."),
+      .withMessage('Insira um e-mail válido.'),
+    body('password').isString().withMessage('A senha é obrigatória.'),
   ];
 };
 
