@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const { Schema } = require(mongoose);
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
 const photoSchema = new Schema(
   {
@@ -12,8 +12,8 @@ const photoSchema = new Schema(
   },
   {
     timestamp: true,
-  }
+  },
 );
 
-const Photo = mongoose.model("Photos", photoSchema);
+const Photo = mongoose.model('Photos', photoSchema);
 module.exports = Photo;
