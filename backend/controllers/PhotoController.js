@@ -27,6 +27,44 @@ const insertPhoto = async (req, res) => {
   res.status(201).json(newPhoto);
 };
 
+//Remove a photo from DB
+const deletePhoto = async (req, res) => {
+  const { id } = req.params;
+  const reqUser = req.user;
+
+  try {
+    const photo = await Photo.findById(mongoose.Types.ObjectId(id));
+
+    //Check if photo exists
+    if (!photo) {
+      res.status(404).json({ errors: ['Foto não encontrada.'] });
+      return;
+    }
+
+    //Check photo belongs to user
+    if (!photo.userID.equals(reqUser.id)) {
+      res.status(422).json({ erros: ['Ocorreu um erro, por favor tente novamente mais tarde'] });
+    }
+
+    await Photo.findByIdAndDelete(photo._id);
+
+    res.status(200).json({ id: photo._id, message: 'Foto excluída com sucesso!' });
+  } catch (e) {
+    res.status(404).json({ errors: ['Foto não encontrada.'] });
+  }
+};
+
+//Get all photos
+const getAllPhotos = async (req, res) => {
+  const photos = await Photo.find({})
+    .sort([['createdAt', -1]])
+    .exec();
+
+  return res.status(200).json(photos);
+};
+
 module.exports = {
   insertPhoto,
+  deletePhoto,
+  getAllPhotos,
 };
