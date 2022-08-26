@@ -14,7 +14,7 @@ const insertPhoto = async (req, res) => {
   const newPhoto = await Photo.create({
     image,
     title,
-    userID: user._id,
+    userId: user._id,
     userName: user.name,
   });
 
@@ -42,7 +42,7 @@ const deletePhoto = async (req, res) => {
     }
 
     //Check photo belongs to user
-    if (!photo.userID.equals(reqUser.id)) {
+    if (!photo.userId.equals(reqUser.id)) {
       res.status(422).json({ erros: ['Ocorreu um erro, por favor tente novamente mais tarde'] });
     }
 
@@ -63,8 +63,19 @@ const getAllPhotos = async (req, res) => {
   return res.status(200).json(photos);
 };
 
+//Get user photos
+const getUserPhotos = async (req, res) => {
+  const { id } = req.params;
+  const photos = await Photo.find({ userId: id })
+    .sort([['createdAt', -1]])
+    .exec();
+
+  return res.status(200).json(photos);
+};
+
 module.exports = {
   insertPhoto,
   deletePhoto,
   getAllPhotos,
+  getUserPhotos,
 };
