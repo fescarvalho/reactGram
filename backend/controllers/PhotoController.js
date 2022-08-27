@@ -141,6 +141,39 @@ const likePhoto = async (req, res) => {
   res.status(200).json({ photoId: id, userId: reqUser._id, message: 'A foto foi curtida!' });
 };
 
+//Commente functionality
+
+const commentPhoto = async (req, res) => {
+  const { id } = req.params;
+  const { comment } = req.body;
+
+  const reqUser = req.user;
+  const user = await User.findById(reqUser._id);
+  const photo = await Photo.findById(id);
+
+  //Check if photo exists
+  if (!photo) {
+    res.status(404).json({ errors: ['Foto não encontrada.'] });
+    return;
+  }
+
+  //Put comment ind the array comments
+  const userCommnent = {
+    comment,
+    userName: user.name,
+    userImage: user.profileImage,
+    userId: user._id,
+  };
+
+  photo.comments.push(userCommnent);
+
+  await photo.save();
+
+  res
+    .status(200)
+    .json({ commnet: userCommnent, message: 'O comentário foi adcionado com sucesso!' });
+};
+
 module.exports = {
   insertPhoto,
   deletePhoto,
@@ -149,4 +182,5 @@ module.exports = {
   getPhotoById,
   updatePhoto,
   likePhoto,
+  commentPhoto,
 };
