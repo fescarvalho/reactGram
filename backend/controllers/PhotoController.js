@@ -174,6 +174,14 @@ const commentPhoto = async (req, res) => {
     .json({ commnet: userCommnent, message: 'O comentário foi adcionado com sucesso!' });
 };
 
+//Search photos by title
+const searchPhotos = async (req, res) => {
+  const { q } = req.query;
+  const photos = await Photo.find({ title: new RegExp(q, 'i') }).exec();
+
+  res.status(200).json(photos);
+};
+
 module.exports = {
   insertPhoto,
   deletePhoto,
@@ -183,4 +191,5 @@ module.exports = {
   updatePhoto,
   likePhoto,
   commentPhoto,
+  searchPhotos,
 };
