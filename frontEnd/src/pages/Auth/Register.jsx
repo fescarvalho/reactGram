@@ -1,6 +1,11 @@
-import { Link } from "react-router-dom";
 import "./Auth.css";
+//components
+import { Link } from "react-router-dom";
+//hooks
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+//redux
+import { register, reset } from "../../slices/authSlice";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -8,17 +13,27 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const user = {
-    name,
-    email,
-    password,
-    confirmPassword,
-  };
+  const dispatch = useDispatch();
+
+  const { loading, error } = useSelector((state) => state.auth);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(user);
+
+    const user = {
+      name,
+      email,
+      password,
+      confirmPassword,
+    };
+
+    dispatch(register(user));
   };
+
+  //Clean all auth states
+  useEffect(() => {
+    dispatch(reset());
+  }, [dispatch]);
 
   return (
     <div id="register">
@@ -26,7 +41,6 @@ const Register = () => {
       <p className="subtitle">Cadestre-se para ver as fotos dos seus amigos.</p>
       <form onSubmit={handleSubmit}>
         <input
-          id="nome"
           name="nome"
           type="text"
           placeholder="Nome"
@@ -35,15 +49,12 @@ const Register = () => {
         />
 
         <input
-          id="email"
-          name="email"
           type="email"
-          placeholder="Email"
+          placeholder="E-mail"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
         />
         <input
-          id="senha"
           name="senha"
           type="password"
           placeholder="Senha"
@@ -51,7 +62,6 @@ const Register = () => {
           value={password}
         />
         <input
-          id="confirmsenha"
           name="confirmsenha"
           type="password"
           placeholder="Confirme a Senha"
